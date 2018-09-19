@@ -1,32 +1,60 @@
-# A basic server that can respond to clients
-
+#!/usr/bin/env python3
+import hashlib
 import socket
-import sys
 
-HOST = 'localhost'
-PORT = 5555
+HOST = ''  # Standard loopback interface address (localhost)
+PORT = 5555        # Port to listen on (non-privileged ports are > 1023)
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+s.bind((HOST, PORT))
+s.listen(0)
 
-try:
-    s.bind((HOST, PORT))
-    
-except socket.error as msg:
-    print 'Bind failed. Error Code : ' + str(msg[0]) + ' Message ' + msg[1]
-    sys.exit()
-    
-s.listen(10)
-print 'Socket now listening'
+print ("Now listening for connections...")
 
-#now keep talking with the client
-while 1:
-    #wait to accept a connection - blocking call
+KVstore = {}
+
+while True:
     conn, addr = s.accept()
-    print 'Connected with ' + addr[0] + ':' + str(addr[1])
-    
-    data = conn.recv(1024)
-    if not data:
-        break
-    print (data)
+    print ('Connected by', addr)
 
-s.close() 
+    data = conn.recv(1024)
+    clientInfo = str.split(data)
+
+    operation = clientInfo[0]
+    #key = (hashlib.md5(clientInfo[2])).digest()
+
+    if (operation.lower() == 'stats'):
+        entries = ((str(len(KVstore))))
+        conn.send("\nThe number of entries is: " + entries)
+
+    if (operation.lower() == 'set'):
+        key = clientInfo[1]
+        value = clientInfo[2]
+        KVstore[key] = value
+        conn.send("\nSET command succesfully executed.")
+
+    if (operation.lower() == 'multiset'):
+        index = 1
+        while index < len(clientInfo):
+            KVstore[clientInfo[index]] = clientInfo[index+1]
+            index = index + 2
+        conn.send("\nMultiset command succesfully executed.")
+
+    if (operation.lower() == 'get'):
+        key = clientInfo[1]
+        keyResponse = KVstore.get(key)
+        conn.send("\nThe value for '" + key + "' is: " + keyResponse)
+        
+    if (operation.lower() == 'multiget'):
+        index = 1
+        while index < len(clientInfo):
+            keyResponse = KVstore.get(clientInfo[index])
+            conn.send("\nThe value for '" + clientInfo[index]  + "' is: " + keyResponse)
+            index = index + 1
+        conn.send("\n\nMultiget command succesfully executed.")
+
+
+    conn.close()
+    print
+    #print
+
