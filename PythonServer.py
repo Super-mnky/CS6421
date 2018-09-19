@@ -46,22 +46,30 @@ while True:
             conn.send("\nMultiset command succesfully executed.")
 
         elif (operation.lower() == 'get'):
-            key = clientInfo[1]
-            keyResponse = KVstore.get(key)
-            conn.send("\nThe value for '" + key + "' is: " + keyResponse)
+            try:
+                key = clientInfo[1]
+                keyResponse = KVstore.get(key)
+                conn.send("\nThe value for '" + key + "' is: " + keyResponse)
+            except:
+                conn.send("\nThis key is not in the KV store")
         
         #same as multiset
         elif (operation.lower() == 'multiget'):
             index = 1
-            while index < len(clientInfo):
-                keyResponse = KVstore.get(clientInfo[index])
-                conn.send("\nThe value for '" + clientInfo[index]  + "' is: " + keyResponse)
-                index = index + 1
-            conn.send("\n\nMultiget command succesfully executed.")
+            try:
+                while index < len(clientInfo):
+                    keyResponse = KVstore.get(clientInfo[index])
+                    conn.send("\nThe value for '" + clientInfo[index]  + "' is: " + keyResponse)
+                    index = index + 1
+                conn.send("\n\nMultiget command succesfully executed.")
+            except:
+                conn.send("\nOne or more of the keys is not in the KV store.")
 
+        else:
+            conn.send("Invalid operation specified.")
     #here to catch invalid operations or incorrect formatting of KV pairs
     except:
-        conn.send("\nImproper operation, formatting, or invalid key in KV store. Terminating session.")
+        conn.send("\nImproper formatting. Terminating session.")
 
     conn.close()
     print
