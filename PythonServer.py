@@ -61,7 +61,7 @@ while True:
 
     #here to catch invalid operations or incorrect formatting of KV pairs
     except:
-        conn.send("\nImproper operation or formatting. Terminating session.")
+        conn.send("\nImproper operation, formatting, or invalid key in KV store. Terminating session.")
 
     conn.close()
     print
