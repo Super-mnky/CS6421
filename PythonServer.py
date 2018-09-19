@@ -66,7 +66,7 @@ while True:
                 conn.send("\nOne or more of the keys is not in the KV store.")
 
         else:
-            conn.send("Invalid operation specified.")
+            conn.send("\nInvalid operation specified.")
     #here to catch invalid operations or incorrect formatting of KV pairs
     except:
         conn.send("\nImproper formatting. Terminating session.")
