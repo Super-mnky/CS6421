@@ -20,30 +20,39 @@ while True:
     data = conn.recv(1024)
     clientInfo = str.split(data)
 
-    #need a try catch block, wont always be 3 array objects
     operation = clientInfo[0]
-    keyHash = (hashlib.sha1(clientInfo[2])).digest()
-    value = clientInfo[1]
-    
-    print (keyHash)
-    break
+    #key = (hashlib.md5(clientInfo[2])).digest()
 
-    print(clientInfo[0] + " " + clientInfo[1] + " " + clientInfo[2])
     if (operation.lower() == 'stats'):
-        print ("this is where we give him the damn stats")
-        response1 = len(KVstore)
-        conn.send(response1)
+        entries = ((str(len(KVstore))))
+        conn.send("\nThe number of entries is: " + entries)
 
     if (operation.lower() == 'set'):
-        print ("This is where I implement 'set' method")
-        KVstore[keyHash] = value
+        key = clientInfo[1]
+        value = clientInfo[2]
+        KVstore[key] = value
+        conn.send("\nSET command succesfully executed.")
+
+    if (operation.lower() == 'multiset'):
+        index = 1
+        while index < len(clientInfo):
+            KVstore[clientInfo[index]] = clientInfo[index+1]
+            index = index + 2
+        conn.send("\nMultiset command succesfully executed.")
 
     if (operation.lower() == 'get'):
-        print ("Here I implement get method")
-        response2 = KVstore.get(keyHash)
+        key = clientInfo[1]
+        keyResponse = KVstore.get(key)
+        conn.send("\nThe value for '" + key + "' is: " + keyResponse)
+        
+    if (operation.lower() == 'multiget'):
+        index = 1
+        while index < len(clientInfo):
+            keyResponse = KVstore.get(clientInfo[index])
+            conn.send("\nThe value for '" + clientInfo[index]  + "' is: " + keyResponse)
+            index = index + 1
+        conn.send("\n\nMultiget command succesfully executed.")
 
-        print response2
-        #conn.send(response2)
 
     conn.close()
     print
