@@ -1,4 +1,4 @@
-# A simple client to interact with the  KVstore server.
+# A simple client to interact with the KVstore server.
 # Written by Jerry Jones IV
 
 import socket
@@ -28,7 +28,7 @@ while True:
     socket_list = [sys.stdin, s]
     ready_to_read,ready_to_write,in_error = select.select(socket_list , [], [])
 
-    #for all sockets read and print the data
+    #for all sockets,  read and print the data from the server
     for sock in ready_to_read:
             if sock == s:
                 data = sock.recv(4096)
