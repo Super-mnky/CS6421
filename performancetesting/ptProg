@@ -1,0 +1,37 @@
+#!/bin/bash
+
+min=100000
+avg=0
+max=0
+temp=0
+sum=0
+
+limit=25
+for i in $( seq 0 $limit)
+do	
+	a=`date +%s%N | cut -b1-13`
+	python Performancetest.py
+	printf "Executed $i time(s).\n"
+	b=`date +%s%N | cut -b1-13`
+	
+	temp=$(($b-$a))
+	sum=$(($sum+$temp))
+
+	printf "Execution time was `expr $b - $a` nanoseconds.\n\n"
+
+	if [ $temp -le $min ]
+		then
+		min=$temp
+	fi
+
+	if [ $temp -gt $max ]
+		then
+		max=$temp
+	fi
+
+done
+
+printf "The minimum time was $min\n"
+printf "the maximum time was $max\n"
+printf "The average time was `expr $sum / $limit` nanoseconds.\n"
+
