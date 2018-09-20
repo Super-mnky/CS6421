@@ -1,16 +1,18 @@
 #!/bin/bash
 
+prog=$1
+limit=$2
+
 min=100000
 avg=0
 max=0
 temp=0
 sum=0
 
-limit=25
 for i in $( seq 0 $limit)
 do	
 	a=`date +%s%N | cut -b1-13`
-	python Performancetest.py
+	python $prog
 	printf "Executed $i time(s).\n"
 	b=`date +%s%N | cut -b1-13`
 	
