@@ -41,3 +41,13 @@ In a similiar manner, you may retrieve multiple items as well:
 or more generally
 # python PythonClient.py localhost "multiset KEY KEY KEY KEY KEY...."
 The server will confirm success or failed execution. 
+
+PERFORMANCE TESTING
+To test performance latency, navigate to the performancetesting directory and you will find the performance testing program, 'perfTest', along with 4 other programs. The testing program is easy to use, assuming all the protocols above have been proven to work. perftest tests all the protocols that are interest, returning the minumum, maximum, and average latency for your trial. This is the format you will use.
+# ./perfTest ptSET.py 25
+or more generally
+# ./perfTest <FileToTest> <NumberOfTrials>
+The files were intended to run the GET commands before. There fore, you can run GET,SET,MULTIGET, then MULTISET and have no issues.
+
+ADDITIONALLY
+The wiki homepage has screen shots of the performance results in case you are too lazy to do them yourself.
