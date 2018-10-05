@@ -1,6 +1,6 @@
-Welcome to Jerry Jones IV's simple Key-Value store system! 
+# Welcome to Jerry Jones IV's simple Key-Value store system! 
 
-THE SERVER
+#### THE SERVER
 Starting the server is very simple. It is configured to run on localhost, but in later configurations it will be customizedable via the command line. To start it simply run the command, 
 # python PythonServer.py. 
 If it initializes correctly, the feedback should indicate it:
